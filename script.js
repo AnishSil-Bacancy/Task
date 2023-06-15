@@ -1,10 +1,13 @@
 const main = document.querySelector('#main')
 // get the main element under which we will have our posts
 
+const numberPost = document.querySelector('#number-of-posts')
+
+
 function createPost({id, title, body }, userName) {
     // Creates the post content
     const htmlSegment = `
-    <div class="card m-2 bg-light" style="width: 30rem;">
+    <div class="card m-2 bg-light " style="width: 30rem;" id="post-${id}">
         <div class="card-body">
             <h5 class="card-title">${title}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">${userName}</h6>
@@ -60,7 +63,7 @@ async function getPost(user) {
     let post = await postData.json() 
     
     //loop through each postsdata and create the post
-    post.forEach(element => {
+    post.forEach((element) => {
         let userName = user[element.userId -1].username
         createPost(element,userName)
     });
@@ -83,5 +86,19 @@ async function posts() {
     await getComments()
 }
 
-// calling the name function 
 posts()
+
+//Control the number of posts to display
+numberPost.addEventListener('change', (e) => {
+    const posts = main.children
+    for(let post of posts){
+        let id = parseInt(post.id.substring(5))
+        if(id <= parseInt(e.target.value)){
+            post.classList.remove('d-none')
+        }
+        else{
+            post.classList.add('d-none')
+        }
+    }
+})
+// calling the name function 
